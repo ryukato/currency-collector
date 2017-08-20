@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 /*
- // TODO: integrate collector and parser
  // TODO: create save parse currency list to repository
  // TODO: create schedule job to collect and parsing
 */

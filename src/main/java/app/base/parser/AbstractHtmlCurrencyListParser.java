@@ -1,25 +1,30 @@
 package app.base.parser;
 
+import app.base.domain.Currency;
 import app.base.domain.ParsedCurrency;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Document, List<ParsedCurrency>> {
-    Elements getElements(Document document, String currencyListElementsQuery) {
+abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Document, List<Currency>> {
+
+    private static final String INVALID_NUMBER_CHARS = "[\\,\\-\\%]|\\s";
+
+    private Elements getElements(Document document, String currencyListElementsQuery) {
         return Optional.ofNullable(document)
                 .map(d -> d.select(currencyListElementsQuery))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid document - given document is null"));
     }
 
     @Override
-    public List<ParsedCurrency> parse(Document document) {
+    public List<Currency> parse(Document document) {
         Elements rowElements = getElements(document, getCurrencyListCssQuery());
         if (rowElements == null || rowElements.isEmpty()) {
             return Collections.emptyList();
@@ -28,7 +33,21 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
                 .map(getMapper()).collect(Collectors.toList());
     }
 
-    abstract Function<Element, ParsedCurrency> getMapper();
+    BigDecimal toBigDecimal(String input) {
+
+        return Optional.ofNullable(input).map(i ->
+                {
+                    String removedInvalidChars = i.replaceAll(INVALID_NUMBER_CHARS, "");
+                    if (removedInvalidChars.isEmpty()) {
+                        return BigDecimal.ZERO;
+                    } else {
+                        return new BigDecimal(removedInvalidChars);
+                    }
+                }
+        ).orElse(BigDecimal.ZERO);
+    }
+
+    abstract Function<Element, Currency> getMapper();
     abstract String getCurrencyListCssQuery();
 
 }

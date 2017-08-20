@@ -94,6 +94,24 @@ public class Currency {
         return currencyInDollar;
     }
 
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "currency='" + currency + '\'' +
+                ", currencyInKorean='" + currencyInKorean + '\'' +
+                ", buyInCashCurrency=" + buyInCashCurrency +
+                ", buyInCashSpread=" + buyInCashSpread +
+                ", sellInCashCurrency=" + sellInCashCurrency +
+                ", sellInCashSpread=" + sellInCashSpread +
+                ", buyInWireCurrency=" + buyInWireCurrency +
+                ", sellInWireCurrency=" + sellInWireCurrency +
+                ", travelerCheckCurrency=" + travelerCheckCurrency +
+                ", foreignCheckCurrency=" + foreignCheckCurrency +
+                ", sellingBaseRate=" + sellingBaseRate +
+                ", currencyInDollar=" + currencyInDollar +
+                '}';
+    }
+
     public static Builder builder() {
         return new Builder();
     }
