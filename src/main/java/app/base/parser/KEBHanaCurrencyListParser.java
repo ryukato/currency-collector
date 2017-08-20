@@ -1,10 +1,8 @@
 package app.base.parser;
 
 import app.base.domain.Currency;
-import app.base.domain.ParsedCurrency;
 import org.jsoup.nodes.Element;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.function.Function;
 
