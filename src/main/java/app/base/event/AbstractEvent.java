@@ -1,32 +1,49 @@
 package app.base.event;
 
-import java.time.LocalDateTime;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@SuppressWarnings("unused")
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public abstract class AbstractEvent<T> implements Event<T> {
     private final LocalDateTime createdAt;
-
+    private final String id;
     private final String createdBy;
+    private final T body;
 
-    AbstractEvent() {
-        this(LocalDateTime.now(), "SYSTEM");
+    public AbstractEvent(T body) {
+        this(body, LocalDateTime.now(), "SYSTEM");
     }
 
-    AbstractEvent(String createdBy) {
-        this(LocalDateTime.now(), createdBy);
-    }
-
-    AbstractEvent(LocalDateTime createdAt, String createdBy) {
+    public AbstractEvent(T body, LocalDateTime createdAt, String createdBy) {
+        this.body = body;
+        this.id = UUID.randomUUID().toString();
         this.createdAt = createdAt;
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedAt() {
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    public LocalDateTime createdAt() {
         return createdAt;
     }
 
-    public String getCreatedBy() {
+    public String createdBy() {
         return createdBy;
     }
 
+    @Override
+    @Field("type")
+    public Class<? extends Event> type() {
+        return getClass();
+    }
+
+    @Override
+    @Field("body")
+    public T body() {
+        return body;
+    }
 }

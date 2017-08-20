@@ -1,8 +1,14 @@
 package app.base;
 
+import app.base.event.AbstractEvent;
+import app.base.event.CollectionStartEvent;
+import app.base.event.Event;
+import app.base.repository.CollectionEventRepository;
+import app.base.repository.EventRepository;
 import com.mongodb.MongoClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +20,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+
+import java.time.LocalDateTime;
 
 /*
  // TODO: integrate collector and parser
@@ -30,8 +38,14 @@ public class MinCurrencyCollectorApplication implements CommandLineRunner{
 		SpringApplication.run(MinCurrencyCollectorApplication.class, args);
 	}
 
+	@Autowired
+	private EventRepository eventRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
+		System.out.println(eventRepository.hashCode());
+		eventRepository.save(new CollectionStartEvent(null));
+
 		Document document = Jsoup.connect("https://www.kebhana.com/cms/rate/wpfxd651_01i_01.do?ajax=true&pbldDvCd=3").get();
 		System.out.println(document.toString());
 	}
@@ -39,7 +53,7 @@ public class MinCurrencyCollectorApplication implements CommandLineRunner{
 	@Bean
 	public MongoDbFactory mongoDbFactory(
 			MongoClient mongoClient,
-			@Value("spring.data.mongodb.database") String databaseName) {
+			@Value("${spring.data.mongodb.database}") String databaseName) {
 
 		return new SimpleMongoDbFactory(mongoClient, databaseName);
 	}
@@ -54,7 +68,7 @@ public class MinCurrencyCollectorApplication implements CommandLineRunner{
 	@Bean
 	public MongoTemplate mongoTemplate(
 			MongoClient mongoClient,
-			@Value("spring.data.mongodb.database") String databaseName) {
+			@Value("${spring.data.mongodb.database}")  String databaseName) {
 		return new MongoTemplate(mongoDbFactory(mongoClient, databaseName));
 	}
 }
