@@ -1,10 +1,8 @@
 package app.base;
 
-import app.base.event.CollectionStartEvent;
 import com.mongodb.MongoClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
