@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ChainingCollectionJob implements CollectionJob<List<Currency>> {
     private final CurrencyListCollector<Document> collector;

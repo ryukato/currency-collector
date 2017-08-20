@@ -47,7 +47,7 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
     }
 
     abstract Function<Element, Currency> getMapper();
-    String getCurrencyListCssQuery() {
+    private String getCurrencyListCssQuery() {
         return CURRENCY_LIST_CSS_QUERY;
     }
 

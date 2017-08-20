@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class Currency {
     private final String currency;
     private final String currencyInKorean;

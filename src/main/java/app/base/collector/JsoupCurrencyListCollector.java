@@ -23,11 +23,11 @@ public class JsoupCurrencyListCollector implements CurrencyListCollector<Documen
     }
 
     private Connection buildConnection(Config config) {
-        return Optional.of(config).map(c -> {
+        return Optional.of(config).map((Config c) -> {
             String url = Optional.ofNullable(config.url()).orElseThrow(() -> new InvalidCollectConfigurationException("URL is empty"));
             Connection connection = buildConnection(url);
-            Optional.ofNullable(c.headers()).ifPresent(headers -> connection.headers(headers));
-            Optional.ofNullable(c.params()).ifPresent(params -> connection.data(params));
+            Optional.ofNullable(c.headers()).ifPresent(connection::headers);
+            Optional.ofNullable(c.params()).ifPresent(connection::data);
             return connection;
 
         }).orElseThrow(() -> new InvalidCollectConfigurationException("Invalid Config"));
