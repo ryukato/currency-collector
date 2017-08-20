@@ -6,8 +6,7 @@ import org.jsoup.nodes.Element;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
-    private static final String CURRENCY_LIST_CSS_QUERY = "tbody tr";
+class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
     private final Function<Element, Currency> mapper = e ->
             Currency
                     .builder()
@@ -24,11 +23,6 @@ public class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser 
                     .setCurrencyInDollar(toBigDecimal(e.child(11).text()))
                     .build();
 
-
-    @Override
-    String getCurrencyListCssQuery() {
-        return CURRENCY_LIST_CSS_QUERY;
-    }
 
     @Override
     Function<Element, Currency> getMapper() {

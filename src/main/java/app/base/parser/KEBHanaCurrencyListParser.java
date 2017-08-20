@@ -6,8 +6,7 @@ import org.jsoup.nodes.Element;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
-    private static final String CURRENCY_LIST_CSS_QUERY = "tbody tr";
+class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
     private final Function<Element, Currency> mapper = e -> {
         String[] currencies = e.child(0).text().split(" ");
         return Currency
@@ -31,10 +30,4 @@ public class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
     Function<Element, Currency> getMapper() {
         return mapper;
     }
-
-    @Override
-    String getCurrencyListCssQuery() {
-        return CURRENCY_LIST_CSS_QUERY;
-    }
-
 }

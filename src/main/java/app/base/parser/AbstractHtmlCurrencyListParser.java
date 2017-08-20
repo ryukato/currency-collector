@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Document, List<Currency>> {
-
+    private static final String CURRENCY_LIST_CSS_QUERY = "tbody tr";
     private static final String INVALID_NUMBER_CHARS = "[\\,\\-\\%]|\\s";
 
     private Elements getElements(Document document, String currencyListElementsQuery) {
@@ -47,6 +47,8 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
     }
 
     abstract Function<Element, Currency> getMapper();
-    abstract String getCurrencyListCssQuery();
+    String getCurrencyListCssQuery() {
+        return CURRENCY_LIST_CSS_QUERY;
+    }
 
 }
