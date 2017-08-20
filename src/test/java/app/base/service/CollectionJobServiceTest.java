@@ -2,7 +2,6 @@ package app.base.service;
 
 import app.base.collector.CurrencyListCollector;
 import app.base.domain.Currency;
-import app.base.domain.ParsedCurrency;
 import app.base.parser.CurrencyListParser;
 import org.jsoup.nodes.Document;
 import org.junit.Before;
@@ -10,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class CollectionJobServiceTest {
     private CurrencyListCollector<Document> collector;
 
     @Mock
-    private CurrencyListParser<Document, List<ParsedCurrency>> parser;
+    private CurrencyListParser<Document, List<Currency>> parser;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -39,10 +39,10 @@ public class CollectionJobServiceTest {
     public void collectNParse() {
         String testCollectUrl = "http://test.com/currencies";
         Document document = new Document(testCollectUrl);
-        ParsedCurrency parsedCurrency = getTestParsedCurrency();
+        Currency currency = getTestParsedCurrency();
         final CurrencyListCollector.Config configHasUrlButOtherEmpty = CurrencyListCollector.Config.emptyHeaderParamsConfig(testCollectUrl);
         when(collector.collect(configHasUrlButOtherEmpty)).thenReturn(document);
-        when(parser.parse(document)).thenReturn(Collections.singletonList(parsedCurrency));
+        when(parser.parse(document)).thenReturn(Collections.singletonList(currency));
 
         ChainingCollectionJob chainingCollectionJob2 = ChainingCollectionJob.builder()
                 .collector(collector)
@@ -76,21 +76,21 @@ public class CollectionJobServiceTest {
 
     }
 
-    private ParsedCurrency getTestParsedCurrency() {
-        return ParsedCurrency
+    private Currency getTestParsedCurrency() {
+        return Currency
                 .builder()
                 .setCurrencyInKorean("미국")
                 .setCurrency("USD")
-                .setBuyInCashCurrency("1")
-                .setBuyInCashSpread("1")
-                .setSellInCashCurrency("1")
-                .setSellInCashSpread("1")
-                .setBuyInWireCurrency("1")
-                .setSellInWireCurrency("1")
-                .setTravelerCheckCurrency("1")
-                .setForeignCheckCurrency("1")
-                .setSellingBaseRate("1")
-                .setCurrencyInDollar("1")
+                .setBuyInCashCurrency(BigDecimal.ONE)
+                .setBuyInCashSpread(BigDecimal.ONE)
+                .setSellInCashCurrency(BigDecimal.ONE)
+                .setSellInCashSpread(BigDecimal.ONE)
+                .setBuyInWireCurrency(BigDecimal.ONE)
+                .setSellInWireCurrency(BigDecimal.ONE)
+                .setTravelerCheckCurrency(BigDecimal.ONE)
+                .setForeignCheckCurrency(BigDecimal.ONE)
+                .setSellingBaseRate(BigDecimal.ONE)
+                .setCurrencyInDollar(BigDecimal.ONE)
                 .build();
     }
 }

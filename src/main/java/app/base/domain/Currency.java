@@ -200,21 +200,6 @@ public class Currency {
             return this;
         }
 
-        public Currency from(ParsedCurrency parsedCurrency) {
-            return new Currency(parsedCurrency.getCurrency(),
-                    parsedCurrency.getCurrencyInKorean(),
-                    new BigDecimal(parsedCurrency.getBuyInCashCurrency()),
-                    new BigDecimal(parsedCurrency.getBuyInCashSpread()),
-                    new BigDecimal(parsedCurrency.getSellInCashCurrency()),
-                    new BigDecimal(parsedCurrency.getSellInCashSpread()),
-                    new BigDecimal(parsedCurrency.getBuyInWireCurrency()),
-                    new BigDecimal(parsedCurrency.getSellInWireCurrency()),
-                    new BigDecimal(parsedCurrency.getTravelerCheckCurrency()),
-                    new BigDecimal(parsedCurrency.getForeignCheckCurrency()),
-                    new BigDecimal(parsedCurrency.getSellingBaseRate()),
-                    new BigDecimal(parsedCurrency.getCurrencyInDollar()));
-        }
-
         public Currency build() {
             return new Currency(currency,
                     currencyInKorean,

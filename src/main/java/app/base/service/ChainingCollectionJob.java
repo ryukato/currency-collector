@@ -2,7 +2,6 @@ package app.base.service;
 
 import app.base.collector.CurrencyListCollector;
 import app.base.domain.Currency;
-import app.base.domain.ParsedCurrency;
 import app.base.parser.CurrencyListParser;
 import org.jsoup.nodes.Document;
 
@@ -12,13 +11,13 @@ import java.util.stream.Collectors;
 
 public class ChainingCollectionJob implements CollectionJob<List<Currency>> {
     private final CurrencyListCollector<Document> collector;
-    private final CurrencyListParser<Document, List<ParsedCurrency>> parser;
+    private final CurrencyListParser<Document, List<Currency>> parser;
     private final CurrencyListCollector.Config config;
     private CollectionJob<List<Currency>> nextJob;
 
     private ChainingCollectionJob(
             CurrencyListCollector<Document> collector,
-            CurrencyListParser<Document, List<ParsedCurrency>> parser,
+            CurrencyListParser<Document, List<Currency>> parser,
             CurrencyListCollector.Config config,
             CollectionJob<List<Currency>> nextJob) {
         this.collector = collector;
@@ -39,9 +38,7 @@ public class ChainingCollectionJob implements CollectionJob<List<Currency>> {
 
     @Override
     public List<Currency> doJob() {
-        return parser.parse(collector.collect(config))
-                .stream().map(p -> Currency.builder().from(p))
-                .collect(Collectors.toList());
+        return parser.parse(collector.collect(config));
     }
 
     static Builder builder() {
@@ -50,7 +47,7 @@ public class ChainingCollectionJob implements CollectionJob<List<Currency>> {
 
     static class Builder {
         private CurrencyListCollector<Document> collector;
-        private CurrencyListParser<Document, List<ParsedCurrency>> parser;
+        private CurrencyListParser<Document, List<Currency>> parser;
         private CurrencyListCollector.Config config;
         private CollectionJob<List<Currency>> nextJob;
 
@@ -59,7 +56,7 @@ public class ChainingCollectionJob implements CollectionJob<List<Currency>> {
             return this;
         }
 
-        Builder parser(CurrencyListParser<Document, List<ParsedCurrency>> parser) {
+        Builder parser(CurrencyListParser<Document, List<Currency>> parser) {
             this.parser = parser;
             return this;
         }
