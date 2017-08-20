@@ -20,7 +20,7 @@ public class Currency {
     private final BigDecimal sellingBaseRate;
     private final BigDecimal currencyInDollar;
 
-    public Currency(String currency,
+    private Currency(String currency,
                     String currencyInKorean,
                     BigDecimal buyInCashCurrency,
                     BigDecimal buyInCashSpread,
