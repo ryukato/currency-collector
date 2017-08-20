@@ -3,7 +3,7 @@ package app.base.collector;
 import java.util.Collections;
 import java.util.Map;
 
-public class EmptyHeaderParamConfiguration implements CurrencyListCollector.Configuration {
+public class EmptyHeaderParamConfiguration implements CurrencyListCollector.Config {
     private final String url;
 
     EmptyHeaderParamConfiguration(String url) {

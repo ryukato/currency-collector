@@ -1,10 +1,6 @@
 package app.base;
 
-import app.base.event.AbstractEvent;
 import app.base.event.CollectionStartEvent;
-import app.base.event.Event;
-import app.base.repository.CollectionEventRepository;
-import app.base.repository.EventRepository;
 import com.mongodb.MongoClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,8 +17,6 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
-import java.time.LocalDateTime;
-
 /*
  // TODO: integrate collector and parser
  // TODO: create save parse currency list to repository
@@ -38,14 +32,8 @@ public class MinCurrencyCollectorApplication implements CommandLineRunner{
 		SpringApplication.run(MinCurrencyCollectorApplication.class, args);
 	}
 
-	@Autowired
-	private EventRepository eventRepository;
-
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(eventRepository.hashCode());
-		eventRepository.save(new CollectionStartEvent(null));
-
 		Document document = Jsoup.connect("https://www.kebhana.com/cms/rate/wpfxd651_01i_01.do?ajax=true&pbldDvCd=3").get();
 		System.out.println(document.toString());
 	}

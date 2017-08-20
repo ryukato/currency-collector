@@ -19,7 +19,7 @@ public class CurrencyListCollectorLoggingTest {
     @Test
     public void collectTest_kebhana() {
         String testCollectUrl = "https://www.kebhana.com/cms/rate/wpfxd651_01i_01.do?ajax=true&pbldDvCd=3";
-        CurrencyListCollector.Configuration configHasUrlButOtherEmpty = new EmptyHeaderParamConfiguration(testCollectUrl);
+        CurrencyListCollector.Config configHasUrlButOtherEmpty = CurrencyListCollector.Config.emptyHeaderParamsConfig(testCollectUrl);
         Document result = collector.collect(configHasUrlButOtherEmpty);
         assertNotNull("collect result is not null", result);
     }

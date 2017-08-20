@@ -48,6 +48,10 @@ public class ParsedCurrency {
         return currency;
     }
 
+    public String getCurrencyInKorean() {
+        return currencyInKorean;
+    }
+
     public String getBuyInCashCurrency() {
         return buyInCashCurrency;
     }

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class JsoupCurrencyListCollector implements CurrencyListCollector<Document> {
     @Override
-    public Document collect(Configuration config) {
+    public Document collect(Config config) {
         validateConfigNotEmpty(config);
 
         try {
@@ -22,7 +22,7 @@ public class JsoupCurrencyListCollector implements CurrencyListCollector<Documen
         }
     }
 
-    private Connection buildConnection(Configuration config) {
+    private Connection buildConnection(Config config) {
         return Optional.of(config).map(c -> {
             String url = Optional.ofNullable(config.url()).orElseThrow(() -> new InvalidCollectConfigurationException("URL is empty"));
             Connection connection = buildConnection(url);
@@ -41,7 +41,7 @@ public class JsoupCurrencyListCollector implements CurrencyListCollector<Documen
         }
     }
 
-    private Configuration validateConfigNotEmpty(Configuration config) {
+    private Config validateConfigNotEmpty(Config config) {
         return Optional.ofNullable(config).orElseThrow(() -> new InvalidCollectConfigurationException("Configuration is empty"));
     }
 }
