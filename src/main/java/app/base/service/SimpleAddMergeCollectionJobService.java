@@ -13,6 +13,12 @@ public class SimpleAddMergeCollectionJobService implements CollectionJobService<
         if (collectionJob == null) {
             return Collections.emptyList();
         }
+        List<Currency> currencyList = getCurrencyList(collectionJob);
+        return currencyList;
+    }
+
+    private List<Currency> getCurrencyList(CollectionJob<List<Currency>> collectionJob) {
+
         CollectionJob<List<Currency>> currentJob = collectionJob;
         List<Currency> currencyList = currentJob.doJob();
         while (currentJob != null) {

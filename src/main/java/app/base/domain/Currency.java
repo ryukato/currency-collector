@@ -1,15 +1,22 @@
 package app.base.domain;
 
 import app.base.error.InvalidCurrencyException;
+import app.base.util.LocalDateTimeUtil;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
+@Document
 public class Currency {
+    @Id
+    private final String id;
     private final LocalDateTime baseDateTime;
     private final String currency;
     private final String currencyInKorean;
@@ -25,6 +32,7 @@ public class Currency {
     private final BigDecimal currencyInDollar;
 
     private Currency(
+                    String id,
                     LocalDateTime baseDateTime,
                     String currency,
                     String currencyInKorean,
@@ -38,6 +46,7 @@ public class Currency {
                     BigDecimal foreignCheckCurrency,
                     BigDecimal sellingBaseRate,
                     BigDecimal currencyInDollar) {
+        this.id = id;
         this.baseDateTime = baseDateTime;
         this.currency = currency;
         this.currencyInKorean = currencyInKorean;
@@ -51,6 +60,10 @@ public class Currency {
         this.foreignCheckCurrency = foreignCheckCurrency;
         this.sellingBaseRate = sellingBaseRate;
         this.currencyInDollar = currencyInDollar;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public LocalDateTime getBaseDateTime() {
@@ -129,6 +142,7 @@ public class Currency {
     }
 
     public static class Builder {
+        private String id;
         private LocalDateTime baseDateTime;
         private String currency;
         private String currencyInKorean;
@@ -143,9 +157,18 @@ public class Currency {
         private BigDecimal sellingBaseRate;
         private BigDecimal currencyInDollar;
 
-        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyMMdd HHmmss");
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
         public Builder setBaseDateTime(String baseDateTime) {
-            this.baseDateTime = LocalDateTime.parse(baseDateTime, formatter);
+            this.baseDateTime = LocalDateTimeUtil.from(baseDateTime, "yyyMMdd HHmmss");
+            return this;
+        }
+
+        public Builder setBaseDateTime(LocalDateTime baseDateTime) {
+            this.baseDateTime = baseDateTime;
             return this;
         }
 
@@ -220,7 +243,11 @@ public class Currency {
         }
 
         public Currency build() {
+            if (this.id == null || this.id.isEmpty()) {
+                this.id = UUID.randomUUID().toString();
+            }
             return new Currency(
+                    id,
                     baseDateTime,
                     currency,
                     currencyInKorean,

@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,8 +34,16 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
         if (rowElements == null || rowElements.isEmpty()) {
             return Collections.emptyList();
         }
-        return rowElements.parallelStream()
-                .map(getMapper()).collect(Collectors.toList());
+        ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        List<Currency> currencies = Collections.emptyList();
+        try {
+            currencies = forkJoinPool.submit(() ->
+                    rowElements.parallelStream().map(getMapper()).collect(Collectors.toList())
+            ).get();
+        }catch (InterruptedException | ExecutionException e) {
+            // do nothing
+        }
+        return currencies;
     }
 
     BigDecimal toBigDecimal(String input) {
