@@ -1,7 +1,9 @@
 package app.base.parser;
 
 import app.base.domain.Currency;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -27,5 +29,9 @@ class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
     @Override
     Function<Element, Currency> getMapper() {
         return mapper;
+    }
+
+    String getBaseDateTime(Document document) {
+        return document.select("dl.info-txt > dd").get(0).text();
     }
 }

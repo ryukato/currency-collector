@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 public class SimpleAddMergeCollectionJobService implements CollectionJobService<List<Currency>> {
     @Override
     public List<Currency> execute(CollectionJob<List<Currency>> collectionJob) {
+        if (collectionJob == null) {
+            return Collections.emptyList();
+        }
         CollectionJob<List<Currency>> currentJob = collectionJob;
         List<Currency> currencyList = currentJob.doJob();
         while (currentJob != null) {

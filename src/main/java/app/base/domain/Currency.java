@@ -4,10 +4,13 @@ import app.base.error.InvalidCurrencyException;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class Currency {
+    private final LocalDateTime baseDateTime;
     private final String currency;
     private final String currencyInKorean;
     private final BigDecimal buyInCashCurrency;
@@ -21,7 +24,9 @@ public class Currency {
     private final BigDecimal sellingBaseRate;
     private final BigDecimal currencyInDollar;
 
-    private Currency(String currency,
+    private Currency(
+                    LocalDateTime baseDateTime,
+                    String currency,
                     String currencyInKorean,
                     BigDecimal buyInCashCurrency,
                     BigDecimal buyInCashSpread,
@@ -33,6 +38,7 @@ public class Currency {
                     BigDecimal foreignCheckCurrency,
                     BigDecimal sellingBaseRate,
                     BigDecimal currencyInDollar) {
+        this.baseDateTime = baseDateTime;
         this.currency = currency;
         this.currencyInKorean = currencyInKorean;
         this.buyInCashCurrency = buyInCashCurrency;
@@ -45,6 +51,10 @@ public class Currency {
         this.foreignCheckCurrency = foreignCheckCurrency;
         this.sellingBaseRate = sellingBaseRate;
         this.currencyInDollar = currencyInDollar;
+    }
+
+    public LocalDateTime getBaseDateTime() {
+        return baseDateTime;
     }
 
     public String getCurrency() {
@@ -98,6 +108,7 @@ public class Currency {
     @Override
     public String toString() {
         return "Currency{" +
+                "baseDateTime='" + baseDateTime + '\'' +
                 "currency='" + currency + '\'' +
                 ", currencyInKorean='" + currencyInKorean + '\'' +
                 ", buyInCashCurrency=" + buyInCashCurrency +
@@ -118,6 +129,7 @@ public class Currency {
     }
 
     public static class Builder {
+        private LocalDateTime baseDateTime;
         private String currency;
         private String currencyInKorean;
         private BigDecimal buyInCashCurrency;
@@ -130,6 +142,12 @@ public class Currency {
         private BigDecimal foreignCheckCurrency;
         private BigDecimal sellingBaseRate;
         private BigDecimal currencyInDollar;
+
+        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyMMdd HHmmss");
+        public Builder setBaseDateTime(String baseDateTime) {
+            this.baseDateTime = LocalDateTime.parse(baseDateTime, formatter);
+            return this;
+        }
 
         public Builder setCurrency(String currency) {
             if (StringUtils.isEmpty(currency)) {
@@ -202,7 +220,9 @@ public class Currency {
         }
 
         public Currency build() {
-            return new Currency(currency,
+            return new Currency(
+                    baseDateTime,
+                    currency,
                     currencyInKorean,
                     buyInCashCurrency,
                     buyInCashSpread,

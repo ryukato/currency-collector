@@ -16,7 +16,7 @@ import java.util.List;
 import static junit.framework.TestCase.assertFalse;
 import static org.mockito.Mockito.*;
 
-public class CollectionJobServiceTest {
+public class SimpleAddMergeCollectionJobServiceTest {
     private CollectionJobService<List<Currency>> collectionJobService;
 
     @Mock
@@ -36,7 +36,7 @@ public class CollectionJobServiceTest {
     }
 
     @Test
-    public void collectNParse() {
+    public void buildCurrencies() {
         String testCollectUrl = "http://test.com/currencies";
         Document document = new Document(testCollectUrl);
         Currency currency = getTestParsedCurrency();
@@ -71,6 +71,30 @@ public class CollectionJobServiceTest {
 
         verify(collector, times(3)).collect(configHasUrlButOtherEmpty);
         verify(parser, times(3)).parse(document);
+        //assertThat("currencies is not null", currencies, isNotNull());
+        assertFalse(currencies == null);
+
+    }
+
+    @Test
+    public void buildCurrencies_WithOnlySingleJob() {
+        String testCollectUrl = "http://test.com/currencies";
+        Document document = new Document(testCollectUrl);
+        Currency currency = getTestParsedCurrency();
+        final CurrencyListCollector.Config configHasUrlButOtherEmpty = CurrencyListCollector.Config.emptyHeaderParamsConfig(testCollectUrl);
+        when(collector.collect(configHasUrlButOtherEmpty)).thenReturn(document);
+        when(parser.parse(document)).thenReturn(Collections.singletonList(currency));
+
+        ChainingCollectionJob chainingCollectionJob1 = ChainingCollectionJob.builder()
+                .collector(collector)
+                .parser(parser)
+                .config(configHasUrlButOtherEmpty)
+                .build();
+
+        List<Currency> currencies = collectionJobService.execute(chainingCollectionJob1);
+
+        verify(collector, times(1)).collect(configHasUrlButOtherEmpty);
+        verify(parser, times(1)).parse(document);
         //assertThat("currencies is not null", currencies, isNotNull());
         assertFalse(currencies == null);
 

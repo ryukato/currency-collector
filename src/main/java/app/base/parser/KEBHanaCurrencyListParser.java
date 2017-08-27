@@ -1,7 +1,9 @@
 package app.base.parser;
 
 import app.base.domain.Currency;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -23,11 +25,17 @@ class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
                 .setForeignCheckCurrency(toBigDecimal(e.child(8).text()))
                 .setSellingBaseRate(toBigDecimal(e.child(9).text()))
                 .setCurrencyInDollar(toBigDecimal(e.child(11).text()))
+                .setBaseDateTime(e.child(12).child(0).text().replaceAll("[년월일]","").replaceAll("[시분초]",""))
                 .build();
     };
 
     @Override
     Function<Element, Currency> getMapper() {
         return mapper;
+    }
+
+    String getBaseDateTime(Document document) {
+        Elements currencyInfoHeader = document.select("p.txtRateBox > span");
+        return currencyInfoHeader.get(0).child(1).text() + " " + currencyInfoHeader.get(0).child(5).text();
     }
 }

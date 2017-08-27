@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,10 +17,13 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
     private static final String CURRENCY_LIST_CSS_QUERY = "tbody tr";
     private static final String INVALID_NUMBER_CHARS = "[\\,\\-\\%]|\\s";
 
-    private Elements getElements(Document document, String currencyListElementsQuery) {
-        return Optional.ofNullable(document)
+    Elements getElements(Document document, String currencyListElementsQuery) {
+        Elements elements = Optional.ofNullable(document)
                 .map(d -> d.select(currencyListElementsQuery))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid document - given document is null"));
+        String baseDate = getBaseDateTime(document);
+        elements.stream().forEach(consumerAppendBaseDate(baseDate));
+        return elements;
     }
 
     @Override
@@ -45,10 +49,19 @@ abstract class AbstractHtmlCurrencyListParser implements CurrencyListParser<Docu
                 }
         ).orElse(BigDecimal.ZERO);
     }
-
+    abstract String getBaseDateTime(Document document);
     abstract Function<Element, Currency> getMapper();
     private String getCurrencyListCssQuery() {
         return CURRENCY_LIST_CSS_QUERY;
+    }
+
+    private Consumer<Element> consumerAppendBaseDate(String baseDate) {
+        return element -> {
+            Element td = new Element("td");
+            Element span = new Element("span").appendText(baseDate);
+            td.appendChild(span);
+            element.appendChild(td);
+        };
     }
 
 }

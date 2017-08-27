@@ -18,8 +18,6 @@ public class JsoupCurrencyListParserTest {
 
     @Test
     public void test_kebhana() throws IOException  {
-        System.out.println("123,353535-,1235%".replaceAll("[\\,\\-\\%]", ""));
-        System.out.println("-".replaceAll("[\\,\\-\\%]", ""));
         File docFile = new File(getClass().getResource("/parser/test_sample.html").getPath());
         this.document = Jsoup.parse(docFile, "UTF-8", "http://test.com");
 
@@ -27,7 +25,6 @@ public class JsoupCurrencyListParserTest {
         List<Currency> parsedCurrencyList = currencyListParser.parse(document);
         assertNotNull("parsed currency list is not null", parsedCurrencyList);
         assertFalse(parsedCurrencyList.isEmpty());
-//        System.out.println(parsedCurrencyList.stream().map(Currency::toString).collect(Collectors.joining("\n")));
     }
 
     @Test
@@ -39,6 +36,5 @@ public class JsoupCurrencyListParserTest {
         List<Currency> parsedCurrencyList = currencyListParser.parse(document);
         assertNotNull("parsed currency list is not null", parsedCurrencyList);
         assertFalse(parsedCurrencyList.isEmpty());
-//        System.out.println(parsedCurrencyList.stream().map(Currency::toString).collect(Collectors.joining("\n")));
     }
 }
