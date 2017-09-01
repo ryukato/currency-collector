@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -163,7 +162,11 @@ public class Currency {
         }
 
         public Builder setBaseDateTime(String baseDateTime) {
-            this.baseDateTime = LocalDateTimeUtil.from(baseDateTime, "yyyMMdd HHmmss");
+            return this.setBaseDateTime(baseDateTime, "yyyMMdd HHmmss");
+        }
+
+        public Builder setBaseDateTime(String baseDateTime, String format) {
+            this.baseDateTime = LocalDateTimeUtil.from(baseDateTime, format);
             return this;
         }
 

@@ -3,6 +3,7 @@ package app.base.service;
 import app.base.collector.CurrencyListCollector;
 import app.base.domain.Currency;
 import app.base.parser.CurrencyListParser;
+import app.base.repository.CurrencyRepository;
 import org.jsoup.nodes.Document;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +26,18 @@ public class SimpleAddMergeCollectionJobServiceTest {
     @Mock
     private CurrencyListParser<Document, List<Currency>> parser;
 
+    @Mock
+    private CurrencyRepository currencyRepository;
+
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         // mocking
         collector = Mockito.mock(CurrencyListCollector.class);
         parser = Mockito.mock(CurrencyListParser.class);
+        currencyRepository = Mockito.mock(CurrencyRepository.class);
 
-        collectionJobService = new SimpleAddMergeCollectionJobService();
+        collectionJobService = new SimpleAddMergeCollectionJobService(currencyRepository);
     }
 
     @Test
@@ -71,6 +76,9 @@ public class SimpleAddMergeCollectionJobServiceTest {
 
         verify(collector, times(3)).collect(configHasUrlButOtherEmpty);
         verify(parser, times(3)).parse(document);
+        currencies.forEach(currency1 -> {
+            verify(currencyRepository, times(1)).save(currency1);
+        });
         //assertThat("currencies is not null", currencies, isNotNull());
         assertFalse(currencies == null);
 

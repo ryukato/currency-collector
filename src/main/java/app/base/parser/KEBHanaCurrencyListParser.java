@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 import java.util.Optional;
 import java.util.function.Function;
 
-class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
+public class KEBHanaCurrencyListParser extends AbstractHtmlCurrencyListParser {
     private final Function<Element, Currency> mapper = e -> {
         String[] currencies = e.child(0).text().split(" ");
         return Currency

@@ -1,6 +1,7 @@
 package app.base.service;
 
 import app.base.domain.Currency;
+import app.base.repository.CurrencyRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,12 +9,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SimpleAddMergeCollectionJobService implements CollectionJobService<List<Currency>> {
+    private final CurrencyRepository currencyRepository;
+
+    public SimpleAddMergeCollectionJobService(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
+
     @Override
     public List<Currency> execute(CollectionJob<List<Currency>> collectionJob) {
         if (collectionJob == null) {
             return Collections.emptyList();
         }
         List<Currency> currencyList = getCurrencyList(collectionJob);
+        currencyList.stream().forEach(currency -> currencyRepository.save(currency));
         return currencyList;
     }
 

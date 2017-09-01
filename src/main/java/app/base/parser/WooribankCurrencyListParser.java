@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 import java.util.Optional;
 import java.util.function.Function;
 
-class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
+public class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
     private final Function<Element, Currency> mapper = e ->
             Currency
                     .builder()
@@ -23,6 +23,7 @@ class WooribankCurrencyListParser extends AbstractHtmlCurrencyListParser {
                     .setTravelerCheckCurrency(toBigDecimal(e.child(8).text()))
                     .setSellingBaseRate(toBigDecimal(e.child(9).text()))
                     .setCurrencyInDollar(toBigDecimal(e.child(11).text()))
+                    .setBaseDateTime(e.child(12).child(0).text(), "yyyy.MM.dd hh:mm:ss")
                     .build();
 
 

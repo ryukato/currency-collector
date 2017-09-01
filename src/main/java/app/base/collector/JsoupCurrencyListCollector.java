@@ -4,12 +4,10 @@ package app.base.collector;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Optional;
 
-@Service
 public class JsoupCurrencyListCollector implements CurrencyListCollector<Document> {
     @Override
     public Document collect(Config config) {
